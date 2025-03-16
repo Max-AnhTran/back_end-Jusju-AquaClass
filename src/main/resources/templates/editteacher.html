@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Edit Teacher</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+            crossorigin="anonymous"
+        />
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"
+        ></script>
+    </head>
+
+    <body>
+        <h1>Edit Teacher</h1>
+        <form
+            action="#"
+            th:action="@{/teacher/edit/{id}(id=${teacherDTO.id})}"
+            th:object="${teacherDTO}"
+            method="post"
+        >
+            <table>
+                <tr>
+                    <td>
+                        Teacher Name:
+                        <input type="text" th:field="*{fullName}" required />
+                    </td>
+                    <td>
+                        Teacher Phone:
+                        <input type="text" th:field="*{phone}" required />
+                    </td>
+                    <td><input type="submit" value="Edit Teacher" class="btn btn-success"/></td>
+                </tr>
+            </table>
+        </form>
+        <a th:href="@{/teacher}" class="btn btn-primary mt-4">Cancel</a>
+    </body>
+</html>

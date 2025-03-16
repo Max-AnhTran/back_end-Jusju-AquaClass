@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Registrations for Course</title>
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        />
+    </head>
+    <body>
+        <div class="container">
+            <h1 class="mb-4">Registrations</h1>
+
+            <a th:href="@{/}" class="btn btn-primary mb-4">Go Back</a>
+
+            <!-- Check if there are registrations -->
+            <div th:if="${not registrations.empty}">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Course ID</th>
+                            <th>Course Name</th>
+                            <th>Student Name</th>
+                            <th>Status</th>
+                            <th sec:authorize="hasAnyRole('ADMIN', 'TEACHER')">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="registration : ${registrations}">
+                            <td th:text="${registration.courseId}"></td>
+                            <td th:text="${coursesMap[registration.courseId]}"></td>
+                            <td th:text="${studentsMap[registration.studentId]}"></td>
+                            <td th:text="${registration.status}"></td>
+                            <td sec:authorize="hasAnyRole('ADMIN', 'TEACHER')">
+                                <!-- Hiển thị nút Accept và Decline nếu trạng thái là PENDING -->
+                                <div th:if="${registration.status.toString() == 'PENDING'}">
+                                    <form
+                                        th:action="@{/registration/accept/{id}(id=${registration.id})}"
+                                        method="post"
+                                        style="display: inline-block;"
+                                    >
+                                        <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                                    </form>
+                                    <form
+                                        th:action="@{/registration/decline/{id}(id=${registration.id})}"
+                                        method="post"
+                                        style="display: inline-block; margin-left: 5px;"
+                                    >
+                                        <button type="submit" class="btn btn-danger btn-sm">Decline</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Check if there are no registrations -->
+            <div th:unless="${not registrations.empty}">
+                <p class="alert alert-info">This course does not have any registration yet!</p>
+            </div>
+        </div>
+    </body>
+</html>

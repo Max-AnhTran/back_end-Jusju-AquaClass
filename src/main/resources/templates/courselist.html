@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <!-- xmlns:sec="http://www.thymeleaf.org/extras/spring-security6" -->
+    <head>
+        <title>AquaClass</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link
+            type="text/css"
+            rel="stylesheet"
+            href="css/styles.css"
+            th:href="@{css/styles.css}"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+            crossorigin="anonymous"
+        />
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"
+        ></script>
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="header">
+                <div>
+                    <h1>AquaClass - All Courses We Offer</h1>
+                    <!-- <p class="header__welcome">
+                        Welcome <span sec:authentication="name"></span>
+                    </p>
+                    <p>
+                        Authenticated User:
+                        <span sec:authentication="name"></span>
+                    </p>
+                    <p>
+                        User Roles:
+                        <span sec:authentication="principal.authorities"></span>
+                    </p> -->
+                </div>
+                <form th:action="@{/logout}" method="post" class="pt-2">
+                    <input
+                        type="submit"
+                        value="Sign out"
+                        class="btn btn-danger"
+                    />
+                </form>
+                <!-- <a
+                    th:href="@{/student/add/{id}(id=${student.id})}"
+                    class="btn btn-primary"
+                    onclick="return confirm('Ready to register?')"
+                    >Delete</a
+                > -->
+            </div>
+            <table class="table table-striped mt-4">
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Level</th>
+                    <th>Max Students</th>
+                    <th>Teacher</th>
+                    <th sec:authorize="hasRole('ADMIN')"></th>
+                    <th sec:authorize="hasRole('ADMIN')"></th>
+                    <th sec:authorize="hasAnyRole('ADMIN', 'STUDENT')"></th>
+                    <th sec:authorize="hasAnyRole('ADMIN', 'TEACHER')"></th>
+                </tr>
+                <tr th:each="course : ${courses}">
+                    <td th:text="${course.name}"></td>
+                    <td th:text="${course.description}"></td>
+                    <td th:text="${course.level}"></td>
+                    <td th:text="${course.maxStudents}"></td>
+                    <td th:text="${course.teacherName}"></td>
+                    <td sec:authorize="hasRole('ADMIN')">
+                        <a
+                            th:href="@{/editcourse/{id}(id=${course.id})}"
+                            class="btn btn-primary"
+                            >Edit</a
+                        >
+                    </td>
+                    <td sec:authorize="hasRole('ADMIN')">
+                        <a
+                            th:href="@{/deletecourse/{id}(id=${course.id})}"
+                            class="btn btn-danger"
+                            onclick="return confirm('Are you sure?')"
+                            >Delete</a
+                        >
+                    </td>
+                    <td sec:authorize="hasAnyRole('ADMIN', 'STUDENT')">
+                        <!-- Kiểm tra nếu student không phải là null -->
+                        <div th:if="${student != null}">
+                            <!-- Kiểm tra nếu học sinh đã đăng ký khóa học -->
+                            <form
+                                th:if="${registrationStatusMap[course.id] == 'null'}"
+                                th:action="@{/registration/add/course/{id}(id=${course.id})}"
+                                method="post"
+                                onsubmit="return confirm('Are you sure to register?')"
+                            >
+                                <button type="submit" class="btn btn-primary">
+                                    Register
+                                </button>
+                            </form>
+
+                            <!-- Nếu học sinh đã đăng ký, hiển thị trạng thái đăng ký -->
+                            <div
+                                th:unless="${registrationStatusMap[course.id] == 'null'}"
+                            >
+                                <span
+                                    th:switch="${registrationStatusMap[course.id]}"
+                                >
+                                    <a
+                                        th:case="PENDING"
+                                        class="btn btn-warning disabled"
+                                        aria-disabled="true"
+                                        style="pointer-events: none"
+                                    >
+                                        Pending
+                                    </a>
+                                    <a
+                                        th:case="ACCEPTED"
+                                        class="btn btn-success disabled"
+                                        aria-disabled="true"
+                                        style="pointer-events: none"
+                                    >
+                                        Accepted
+                                    </a>
+                                    <a
+                                        th:case="DECLINED"
+                                        class="btn btn-danger disabled"
+                                        aria-disabled="true"
+                                        style="pointer-events: none"
+                                    >
+                                        Declined
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Nếu student là null, hiển thị nút "Register" bị vô hiệu hóa -->
+                        <div th:unless="${student != null}">
+                            <a
+                                class="btn btn-primary disabled"
+                                aria-disabled="true"
+                                style="pointer-events: none"
+                            >
+                                Register
+                            </a>
+                        </div>
+                    </td>
+                    <td sec:authorize="hasAnyRole('ADMIN', 'TEACHER')">
+                        <a
+                            th:href="@{/registration/course/{id}(id=${course.id})}"
+                            class="btn btn-primary"
+                            >See Registrations</a
+                        >
+                    </td>
+                </tr>
+            </table>
+            <a
+                href="/addcourse"
+                class="btn btn-success"
+                sec:authorize="hasRole('ADMIN')"
+                >Add Course</a
+            >
+            <a
+                href="/teacher"
+                class="btn btn-success"
+                sec:authorize="hasRole('ADMIN')"
+                >Teachers Management</a
+            >
+            <a
+                href="/user"
+                class="btn btn-success"
+                sec:authorize="hasRole('ADMIN')"
+                >App Users Management</a
+            >
+            <a
+                href="/student"
+                class="btn btn-success"
+                sec:authorize="hasAnyRole('ADMIN', 'TEACHER')"
+                >See All Students</a
+            >
+            <a
+                href="/registration"
+                class="btn btn-success"
+                sec:authorize="hasAnyRole('ADMIN', 'TEACHER')"
+                >See All Registrations</a
+            >
+            <div
+                sec:authorize="hasAnyRole('ADMIN', 'STUDENT')"
+                th:if="${student != null}"
+                class="mt-4"
+            >
+                <a
+                    th:href="@{/student/edit/{id}(id=${student.id})}"
+                    class="btn btn-warning"
+                    >Edit Student Information</a
+                >
+            </div>
+            <div
+                sec:authorize="hasAnyRole('ADMIN', 'STUDENT')"
+                th:unless="${student != null}"
+                class="mt-4"
+            >
+                <p class="alert alert-info">
+                    Please add student information before registering
+                </p>
+                <a href="/student/add" class="btn btn-success"
+                    >Add Student Information</a
+                >
+            </div>
+        </div>
+    </body>
+</html>

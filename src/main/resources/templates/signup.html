@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Sign Up - AquaClass</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <!-- Bootstrap CSS -->
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+            crossorigin="anonymous"
+        />
+    </head>
+    <body class="d-flex justify-content-center align-items-center vh-100">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-4">
+                    <div class="card shadow p-4">
+                        <h2 class="text-center mb-4">Sign Up - AquaClass</h2>
+
+                        <form
+                            th:object="${signupform}"
+                            th:action="@{/saveuser}"
+                            method="post"
+                        >
+                            <div class="form-group">
+                                <label for="username">User Name:</label>
+                                <input
+                                    type="text"
+                                    id="username"
+                                    th:field="*{username}"
+                                    class="form-control"
+                                    required
+                                />
+                                <p
+                                    th:if="${#fields.hasErrors('username')}"
+                                    th:errors="*{username}"
+                                    class="text-danger"
+                                ></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password:</label>
+                                <input
+                                    type="password"
+                                    id="password"
+                                    th:field="*{password}"
+                                    class="form-control"
+                                    required
+                                />
+                                <p
+                                    th:if="${#fields.hasErrors('password')}"
+                                    th:errors="*{password}"
+                                    class="text-danger"
+                                ></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="passwordCheck"
+                                    >Confirm Password:</label
+                                >
+                                <input
+                                    type="password"
+                                    id="passwordCheck"
+                                    th:field="*{passwordCheck}"
+                                    class="form-control"
+                                    required
+                                />
+                                <p
+                                    th:if="${#fields.hasErrors('passwordCheck')}"
+                                    th:errors="*{passwordCheck}"
+                                    class="text-danger"
+                                ></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    th:field="*{email}"
+                                    class="form-control"
+                                    required
+                                />
+                                <p
+                                    th:if="${#fields.hasErrors('email')}"
+                                    th:errors="*{email}"
+                                    class="text-danger"
+                                ></p>
+                            </div>
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-block"
+                            >
+                                Sign Up
+                            </button>
+                        </form>
+
+                        <hr />
+                        <a
+                            th:href="@{/login}"
+                            class="btn btn-secondary btn-block"
+                            >Sign In</a
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bootstrap JS -->
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-5oCfG0QH8dDq1KO6LvcSRBOVJ2Pz4Pa3qq3r5FhD+9r/MpbJxG+xrN/B4PP4+Jq0"
+            crossorigin="anonymous"
+        ></script>
+    </body>
+</html>
