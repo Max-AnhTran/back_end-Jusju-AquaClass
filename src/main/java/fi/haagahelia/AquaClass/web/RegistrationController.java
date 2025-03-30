@@ -1,7 +1,5 @@
 package fi.haagahelia.AquaClass.web;
 
-import fi.haagahelia.AquaClass.domain.AppUser;
-import fi.haagahelia.AquaClass.domain.Student;
 import fi.haagahelia.AquaClass.domain.Registration.RegistrationStatus;
 import fi.haagahelia.AquaClass.dtoAndService.AppUserDTO;
 import fi.haagahelia.AquaClass.dtoAndService.AppUserService;

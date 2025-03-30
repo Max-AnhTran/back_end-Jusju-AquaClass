@@ -37,11 +37,6 @@ public class CourseController {
     @Autowired
     private RegistrationService registrationService;
 
-    @RequestMapping(value = "/login")
-    public String login() {
-        return "login";
-    }
-
     public CourseController(CourseService courseService, StudentService studentService, TeacherService teacherService,
             AppUserService appUserService, RegistrationService registrationService) {
         this.courseService = courseService;

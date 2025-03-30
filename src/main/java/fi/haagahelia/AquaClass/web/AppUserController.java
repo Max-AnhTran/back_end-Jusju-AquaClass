@@ -33,6 +33,11 @@ public class AppUserController {
         this.emailService = emailService;
     }
 
+    @GetMapping(value = "/login")
+    public String login() {
+        return "login";
+    }
+
     // Display all users
     @GetMapping("/user")
     public String userList(Model model) {

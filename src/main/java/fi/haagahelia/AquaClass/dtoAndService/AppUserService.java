@@ -6,6 +6,9 @@ import fi.haagahelia.AquaClass.domain.Teacher;
 import fi.haagahelia.AquaClass.domain.TeacherRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +24,18 @@ public class AppUserService {
     @Autowired
     private TeacherRepository teacherRepository;
 
-    public AppUserService(AppUserRepository appUserRepository, TeacherRepository teacherRepository) {
+    @Autowired
+    private JWTService jwtService;
+
+    @Autowired
+    AuthenticationManager authManager;
+
+    public AppUserService(AppUserRepository appUserRepository, TeacherRepository teacherRepository,
+            AuthenticationManager authManager, JWTService jwtService) {
         this.appUserRepository = appUserRepository;
         this.teacherRepository = teacherRepository;
+        this.authManager = authManager;
+        this.jwtService = jwtService;
     }
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -103,5 +115,15 @@ public class AppUserService {
             return true;
         }
         return false; // Or handle differently
+    }
+
+    public String verify(AppUserDTO appUserDTO) {
+        Authentication authentication = authManager.authenticate(
+                new UsernamePasswordAuthenticationToken(appUserDTO.getUsername(), appUserDTO.getPassword()));
+
+        if (authentication.isAuthenticated()) {
+            return jwtService.generateToken(appUserDTO.getUsername());
+        }
+        return "Authentication failed";
     }
 }

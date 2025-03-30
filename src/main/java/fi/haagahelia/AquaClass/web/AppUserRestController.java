@@ -14,10 +14,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
-@RequestMapping("/api/users")
+@RequestMapping("/api")
 public class AppUserRestController {
 
     @Autowired
@@ -31,15 +34,22 @@ public class AppUserRestController {
         this.teacherService = teacherService;
     }
 
+    // Login
+    @PostMapping("/login")
+    public String login(@RequestBody AppUserDTO appUserDTO) {
+        return appUserService.verify(appUserDTO);
+    }
+    
+
     // Get all users
-    @GetMapping
+    @GetMapping("/users")
     public ResponseEntity<List<AppUserDTO>> getAllUsers() {
         List<AppUserDTO> users = appUserService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     // Get user by ID
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}")
     public ResponseEntity<AppUserDTO> getUserById(@PathVariable Long id) {
         AppUserDTO appUserDTO = appUserService.getUserById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
@@ -47,7 +57,7 @@ public class AppUserRestController {
     }
 
     // Update user details
-    @PutMapping("/{id}")
+    @PutMapping("/users/{id}")
     public ResponseEntity<Void> updateUser(@PathVariable Long id, @Valid @RequestBody AppUserDTO appUserDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -58,7 +68,7 @@ public class AppUserRestController {
     }
 
     // Delete user by ID
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/users/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         teacherService.deleteTeacher(teacherService.getTeacherByAppUserId(id).getId());
         appUserService.deleteAppUser(id);
@@ -66,7 +76,7 @@ public class AppUserRestController {
     }
 
     // Student signup
-    @PostMapping("/signup")
+    @PostMapping("/users/signup")
     public ResponseEntity<Void> signup(@Valid @RequestBody SignupForm signupForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

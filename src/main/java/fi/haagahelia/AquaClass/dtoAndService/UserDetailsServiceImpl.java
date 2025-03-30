@@ -1,4 +1,4 @@
-package fi.haagahelia.AquaClass.web;
+package fi.haagahelia.AquaClass.dtoAndService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -14,13 +14,13 @@ import fi.haagahelia.AquaClass.domain.AppUserRepository;
  * This class is used by spring security to authenticate and authorize user
  **/
 @Service
-public class UserDetailServiceImpl implements UserDetailsService  {
+public class UserDetailsServiceImpl implements UserDetailsService  {
 	
 	@Autowired
 	private AppUserRepository appUserRepository;
 	
 	// Constructor Injection
-	public UserDetailServiceImpl(AppUserRepository appUserRepository) {
+	public UserDetailsServiceImpl(AppUserRepository appUserRepository) {
 		this.appUserRepository = appUserRepository; 
 	}
 
