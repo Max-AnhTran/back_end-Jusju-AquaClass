@@ -1,4 +1,4 @@
-package fi.haagahelia.AquaClass.dto;
+package fi.haagahelia.AquaClass.dtoAndService;
 
 public class StudentDTO {
     private Long id;

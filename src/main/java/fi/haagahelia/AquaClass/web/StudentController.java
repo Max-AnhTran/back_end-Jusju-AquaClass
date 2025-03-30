@@ -6,10 +6,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import fi.haagahelia.AquaClass.dto.AppUserDTO;
-import fi.haagahelia.AquaClass.dto.StudentDTO;
-import fi.haagahelia.AquaClass.dto.StudentService;
-import fi.haagahelia.AquaClass.dto.AppUserService;
+import fi.haagahelia.AquaClass.dtoAndService.AppUserDTO;
+import fi.haagahelia.AquaClass.dtoAndService.AppUserService;
+import fi.haagahelia.AquaClass.dtoAndService.StudentDTO;
+import fi.haagahelia.AquaClass.dtoAndService.StudentService;
 
 import java.util.Map;
 import java.util.List;

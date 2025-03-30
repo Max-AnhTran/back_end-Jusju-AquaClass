@@ -11,15 +11,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import fi.haagahelia.AquaClass.dto.CourseDTO;
-import fi.haagahelia.AquaClass.dto.AppUserDTO;
-import fi.haagahelia.AquaClass.dto.StudentDTO;
-
-import fi.haagahelia.AquaClass.dto.CourseService;
-import fi.haagahelia.AquaClass.dto.TeacherService;
-import fi.haagahelia.AquaClass.dto.StudentService;
-import fi.haagahelia.AquaClass.dto.AppUserService;
-import fi.haagahelia.AquaClass.dto.RegistrationService;
+import fi.haagahelia.AquaClass.dtoAndService.AppUserDTO;
+import fi.haagahelia.AquaClass.dtoAndService.AppUserService;
+import fi.haagahelia.AquaClass.dtoAndService.CourseDTO;
+import fi.haagahelia.AquaClass.dtoAndService.CourseService;
+import fi.haagahelia.AquaClass.dtoAndService.RegistrationService;
+import fi.haagahelia.AquaClass.dtoAndService.StudentDTO;
+import fi.haagahelia.AquaClass.dtoAndService.StudentService;
+import fi.haagahelia.AquaClass.dtoAndService.TeacherService;
 
 @Controller
 public class CourseController {

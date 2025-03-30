@@ -1,14 +1,15 @@
 package fi.haagahelia.AquaClass.web;
 
-import fi.haagahelia.AquaClass.dto.AppUserDTO;
-import fi.haagahelia.AquaClass.dto.AppUserService;
-import fi.haagahelia.AquaClass.dto.TeacherDTO;
-import fi.haagahelia.AquaClass.dto.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import fi.haagahelia.AquaClass.dtoAndService.AppUserDTO;
+import fi.haagahelia.AquaClass.dtoAndService.AppUserService;
+import fi.haagahelia.AquaClass.dtoAndService.TeacherDTO;
+import fi.haagahelia.AquaClass.dtoAndService.TeacherService;
 
 import java.util.List;
 

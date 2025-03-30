@@ -1,15 +1,17 @@
 package fi.haagahelia.AquaClass.web;
 
+import fi.haagahelia.AquaClass.domain.AppUser;
+import fi.haagahelia.AquaClass.domain.Student;
 import fi.haagahelia.AquaClass.domain.Registration.RegistrationStatus;
-
-import fi.haagahelia.AquaClass.dto.AppUserDTO;
-import fi.haagahelia.AquaClass.dto.AppUserService;
-import fi.haagahelia.AquaClass.dto.CourseDTO;
-import fi.haagahelia.AquaClass.dto.CourseService;
-import fi.haagahelia.AquaClass.dto.RegistrationDTO;
-import fi.haagahelia.AquaClass.dto.RegistrationService;
-import fi.haagahelia.AquaClass.dto.StudentDTO;
-import fi.haagahelia.AquaClass.dto.StudentService;
+import fi.haagahelia.AquaClass.dtoAndService.AppUserDTO;
+import fi.haagahelia.AquaClass.dtoAndService.AppUserService;
+import fi.haagahelia.AquaClass.dtoAndService.CourseDTO;
+import fi.haagahelia.AquaClass.dtoAndService.CourseService;
+import fi.haagahelia.AquaClass.dtoAndService.EmailService;
+import fi.haagahelia.AquaClass.dtoAndService.RegistrationDTO;
+import fi.haagahelia.AquaClass.dtoAndService.RegistrationService;
+import fi.haagahelia.AquaClass.dtoAndService.StudentDTO;
+import fi.haagahelia.AquaClass.dtoAndService.StudentService;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,12 +42,16 @@ public class RegistrationController {
     @Autowired
     private AppUserService appUserService;
 
+    @Autowired
+    private EmailService emailService;
+
     public RegistrationController(RegistrationService registrationService, StudentService studentService,
-            CourseService courseService, AppUserService appUserService) {
+            CourseService courseService, AppUserService appUserService, EmailService emailService) {
         this.registrationService = registrationService;
         this.studentService = studentService;
         this.courseService = courseService;
         this.appUserService = appUserService;
+        this.emailService = emailService;
     }
 
     // Lấy tất cả đăng ký
@@ -157,6 +163,20 @@ public class RegistrationController {
     public String acceptRegistration(@PathVariable Long id, HttpServletRequest request) {
         registrationService.updateRegistrationStatus(id, RegistrationStatus.ACCEPTED);
 
+        // Send email to the student
+        RegistrationDTO registration = registrationService.getRegistrationById(id);
+        if (registration != null) {
+            StudentDTO student = studentService.getStudentById(registration.getStudentId());
+            AppUserDTO appUser = appUserService.getUserById(student.getAppUserId())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            String studentEmail = appUser.getEmail();
+            String subject = "Registration Accepted";
+
+            CourseDTO course = courseService.getCourseById(registration.getCourseId());
+            String message = "Your registration for the course \"" + course.getName() + "\" has been accepted.";
+            emailService.sendSimpleEmail(studentEmail, subject, message);
+        }
+
         // Get the original URL from the "referer" header
         String referer = request.getHeader("Referer");
 
@@ -176,6 +196,20 @@ public class RegistrationController {
     @PostMapping("/decline/{id}")
     public String declineRegistration(@PathVariable Long id, HttpServletRequest request) {
         registrationService.updateRegistrationStatus(id, RegistrationStatus.DECLINED);
+
+        // Send email to the student
+        RegistrationDTO registration = registrationService.getRegistrationById(id);
+        if (registration != null) {
+            StudentDTO student = studentService.getStudentById(registration.getStudentId());
+            AppUserDTO appUser = appUserService.getUserById(student.getAppUserId())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            String studentEmail = appUser.getEmail();
+            String subject = "Registration Declined";
+
+            CourseDTO course = courseService.getCourseById(registration.getCourseId());
+            String message = "Your registration for the course \"" + course.getName() + "\" has been declined.";
+            emailService.sendSimpleEmail(studentEmail, subject, message);
+        }
 
         // Get the original URL from the "referer" header
         String referer = request.getHeader("Referer");

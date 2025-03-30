@@ -1,6 +1,7 @@
 package fi.haagahelia.AquaClass.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,8 @@ public class AppUser {
 
     // Username with unique constraint
     @Column(name = "username", nullable = false, unique = true)
+    @NotEmpty
+    @Size(min=2, max=30)
     private String username;
 
     @Column(name = "password", nullable = false)

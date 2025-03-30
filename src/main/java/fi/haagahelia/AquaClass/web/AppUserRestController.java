@@ -1,10 +1,10 @@
 package fi.haagahelia.AquaClass.web;
 
 import fi.haagahelia.AquaClass.domain.SignupForm;
-import fi.haagahelia.AquaClass.dto.AppUserDTO;
-import fi.haagahelia.AquaClass.dto.AppUserService;
-import fi.haagahelia.AquaClass.dto.TeacherService;
 import fi.haagahelia.AquaClass.domain.AppUser.Role;
+import fi.haagahelia.AquaClass.dtoAndService.AppUserDTO;
+import fi.haagahelia.AquaClass.dtoAndService.AppUserService;
+import fi.haagahelia.AquaClass.dtoAndService.TeacherService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

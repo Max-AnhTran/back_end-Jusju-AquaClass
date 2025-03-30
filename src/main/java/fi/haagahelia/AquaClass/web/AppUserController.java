@@ -1,11 +1,12 @@
 package fi.haagahelia.AquaClass.web;
 
 import fi.haagahelia.AquaClass.domain.SignupForm;
-import fi.haagahelia.AquaClass.dto.AppUserDTO;
-import fi.haagahelia.AquaClass.dto.AppUserService;
-import fi.haagahelia.AquaClass.dto.TeacherService;
 import jakarta.validation.Valid;
 import fi.haagahelia.AquaClass.domain.AppUser.Role;
+import fi.haagahelia.AquaClass.dtoAndService.AppUserDTO;
+import fi.haagahelia.AquaClass.dtoAndService.AppUserService;
+import fi.haagahelia.AquaClass.dtoAndService.TeacherService;
+import fi.haagahelia.AquaClass.dtoAndService.EmailService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,9 +24,13 @@ public class AppUserController {
     @Autowired
     private TeacherService teacherService;
 
-    public AppUserController(AppUserService appUserService, TeacherService teacherService) {
+    @Autowired
+    private EmailService emailService;
+
+    public AppUserController(AppUserService appUserService, TeacherService teacherService, EmailService emailService) {
         this.appUserService = appUserService;
         this.teacherService = teacherService;
+        this.emailService = emailService;
     }
 
     // Display all users
@@ -98,6 +103,8 @@ public class AppUserController {
         );
 
         appUserService.createAppUser(newUserDTO);
+
+        emailService.sendSimpleEmail(signupForm.getEmail(), "Welcome to AquaClass", "Hello " + signupForm.getUsername() + "!" + "\n\n" + "You have successfully signed up for the AquaClass app." + "\n\n" + "Best regards, AquaClass team.");
 
         return "redirect:/login";
     }

@@ -6,9 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import fi.haagahelia.AquaClass.dto.AppUserService;
-import fi.haagahelia.AquaClass.dto.TeacherDTO;
-import fi.haagahelia.AquaClass.dto.TeacherService;
+import fi.haagahelia.AquaClass.dtoAndService.AppUserService;
+import fi.haagahelia.AquaClass.dtoAndService.TeacherDTO;
+import fi.haagahelia.AquaClass.dtoAndService.TeacherService;
 
 import java.util.List;
 

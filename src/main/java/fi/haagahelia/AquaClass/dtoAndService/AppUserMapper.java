@@ -1,4 +1,4 @@
-package fi.haagahelia.AquaClass.dto;
+package fi.haagahelia.AquaClass.dtoAndService;
 
 import fi.haagahelia.AquaClass.domain.AppUser;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
